@@ -1,0 +1,94 @@
+body {
+  display: flex;
+  justify-content: center;   /* centra horizontal */
+  align-items: center;       /* centra vertical */
+  min-height: 100vh;         /* altura mínima igual a la altura de la ventana */
+  margin: 0;
+  padding: 2rem;
+  background-color: #f8f8f8;
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.contenedor {
+    width: 700px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+textarea {
+  width: 100%;
+  height: 250px !important;
+  font-size: 16px;
+  padding: 10px;
+  padding-bottom: 50px; /* espacio para el botón */
+  box-sizing: border-box;
+  border: 5px solid #8ecae6;
+  border-radius: 10px;
+  resize: none;
+}
+
+/* Botón IA tipo Grammarly */
+#mejorarBtn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  padding: 10px 16px 10px 40px;
+  font-size: 14px;
+  color: white;
+  background: linear-gradient(135deg, #00c853, #64dd17);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  font-weight: bold;
+  position: absolute;
+  margin: 10px;
+}
+
+#mejorarBtn:hover {
+  background: linear-gradient(135deg, #00b248, #558b2f);
+}
+
+#mejorarBtn.deshacer {
+  background: linear-gradient(135deg, #37474f, #455a64);
+}
+
+#mejorarBtn.error {
+  background: linear-gradient(135deg, #d50000, #c62828);
+}
+
+#mejorarBtn.procesando {
+  background: linear-gradient(135deg, #2196f3, #00bcd4);
+  cursor: wait;
+}
+
+/* Spinner dentro del botón */
+#mejorarBtn .spinner {
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}

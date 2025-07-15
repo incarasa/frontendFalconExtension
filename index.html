@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Redactor Médico IA</title>
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+
+
+<body>
+    <div class="contenedor">
+        <h1>Redactor de Historias Clínicas</h1>
+  
+        <div class="textarea-wrapper">
+            <textarea id="historiaInput" placeholder="Escribe aquí tu historia clínica rápida..."></textarea>
+            <button id="mejorarBtn">Mejorar con IA</button>
+        </div>
+
+
+        <div id="confirm-buttons" style="display: none;">
+            <button id="confirmarBtn">✅ Confirmar</button>
+        </div>
+
+        <div id="status"></div>
+    </div>
+  
+
+  <script src="script.js"></script>
+</body>
+</html>
