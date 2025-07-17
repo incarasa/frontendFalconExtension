@@ -57,7 +57,7 @@ mejorarBtn.addEventListener("click", async () => {
 
   try {
     const endpointNivel = endpoints[slider.value];
-    const response = await fetch(`https://backend-falcon-extension.vercel.app/api/redactar/${endpointNivel}`, {
+    const response = await fetch(`https://backend-falcon-extension.vercel.app/api/redactar/redactar${endpointNivel}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ texto_usuario: textoOriginal }),
