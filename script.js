@@ -6,19 +6,19 @@ const niveles = {
     texto: "Manual – Solo corrige estilo y ortografía, sin reorganizar ni asumir nada.",
     clase: "manual",
     sliderClase: "slider-manual",
-    endpoint: "manual"
+    endpoint: "Manual"
   },
   2: {
     texto: "Asistido – Redacción estructurada, sin inventar datos.",
     clase: "asistido",
     sliderClase: "slider-asistido",
-    endpoint: "asistido"
+    endpoint: "Asistido"
   },
   3: {
     texto: "Predictivo – Redacción completa, con inferencias clínicas razonables.",
     clase: "predictivo",
     sliderClase: "slider-predictivo",
-    endpoint: "predictivo"
+    endpoint: "Predictivo"
   },
 };
 
@@ -66,7 +66,7 @@ mejorarBtn.addEventListener("click", async () => {
 
   try {
     const nivel = niveles[slider.value];
-    const response = await fetch(`https://backend-falcon-extension.vercel.app/api/redactar/${nivel.endpoint}`, {
+    const response = await fetch(`https://backend-falcon-extension.vercel.app/api/redactar${nivel.endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ texto_usuario: textoOriginal }),
