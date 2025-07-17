@@ -1,3 +1,18 @@
+const slider = document.getElementById("autonomiaSlider");
+const nivelDescripcion = document.getElementById("nivelDescripcion");
+
+const niveles = {
+  1: "Manual – Solo corrige estilo y ortografía, sin reorganizar ni asumir nada.",
+  2: "Asistido – Redacción estructurada, sin inventar datos.",
+  3: "Automático – Redacción completa, con inferencias razonables.",
+};
+
+const endpoints = {
+  1: "Manual",
+  2: "Asistido",
+  3: "Predictivo",
+};
+
 const textarea = document.getElementById("historiaInput");
 const mejorarBtn = document.getElementById("mejorarBtn");
 
@@ -41,7 +56,8 @@ mejorarBtn.addEventListener("click", async () => {
   mejorarBtn.disabled = true;
 
   try {
-    const response = await fetch("https://backend-falcon-extension.vercel.app/api/chatGPT", {
+    const endpointNivel = endpoints[slider.value];
+    const response = await fetch(`https://backend-falcon-extension.vercel.app/api/redactar/${endpointNivel}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ texto_usuario: textoOriginal }),
@@ -62,4 +78,8 @@ mejorarBtn.addEventListener("click", async () => {
   } finally {
     mejorarBtn.disabled = false;
   }
+});
+
+slider.addEventListener("input", () => {
+  nivelDescripcion.textContent = niveles[slider.value];
 });
