@@ -2,15 +2,24 @@ const slider = document.getElementById("autonomiaSlider");
 const nivelDescripcion = document.getElementById("nivelDescripcion");
 
 const niveles = {
-  1: "Manual – Solo corrige estilo y ortografía, sin reorganizar ni asumir nada.",
-  2: "Asistido – Redacción estructurada, sin inventar datos.",
-  3: "Automático – Redacción completa, con inferencias razonables.",
-};
-
-const endpoints = {
-  1: "Manual",
-  2: "Asistido",
-  3: "Predictivo",
+  1: {
+    texto: "Manual – Solo corrige estilo y ortografía, sin reorganizar ni asumir nada.",
+    clase: "manual",
+    sliderClase: "slider-manual",
+    endpoint: "manual"
+  },
+  2: {
+    texto: "Asistido – Redacción estructurada, sin inventar datos.",
+    clase: "asistido",
+    sliderClase: "slider-asistido",
+    endpoint: "asistido"
+  },
+  3: {
+    texto: "Predictivo – Redacción completa, con inferencias clínicas razonables.",
+    clase: "predictivo",
+    sliderClase: "slider-predictivo",
+    endpoint: "predictivo"
+  },
 };
 
 const textarea = document.getElementById("historiaInput");
@@ -56,8 +65,8 @@ mejorarBtn.addEventListener("click", async () => {
   mejorarBtn.disabled = true;
 
   try {
-    const endpointNivel = endpoints[slider.value];
-    const response = await fetch(`https://backend-falcon-extension.vercel.app/api/redactar${endpointNivel}`, {
+    const nivel = niveles[slider.value];
+    const response = await fetch(`https://backend-falcon-extension.vercel.app/api/redactar/${nivel.endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ texto_usuario: textoOriginal }),
@@ -80,6 +89,31 @@ mejorarBtn.addEventListener("click", async () => {
   }
 });
 
+//CODIGO PARA EL SLIDER
+
 slider.addEventListener("input", () => {
-  nivelDescripcion.textContent = niveles[slider.value];
+  const nivel = niveles[slider.value];
+
+  // Actualizar texto descriptivo
+  nivelDescripcion.textContent = nivel.texto;
+  nivelDescripcion.classList.remove("manual", "asistido", "predictivo");
+  nivelDescripcion.classList.add("descripcion-autonomia", nivel.clase);
+
+  // Cambiar el color del thumb dinámicamente
+  slider.setAttribute("data-nivel", slider.value);
+
+  // Actualizar el fondo de la barra con un degradado visual
+  const porcentaje = ((slider.value - 1) / 2) * 100;
+  let color = "#ccc";
+  if (slider.value == "1") color = "#607d8b";
+  else if (slider.value == "2") color = "#f9a825";
+  else if (slider.value == "3") color = "#2e7d32";
+
+  slider.style.background = `linear-gradient(to right, ${color} ${porcentaje}%, #ccc ${porcentaje}%)`;
+
+
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  slider.dispatchEvent(new Event("input"));
 });
