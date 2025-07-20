@@ -47,6 +47,23 @@ textarea.addEventListener("input", () => {
   }
 });
 
+let modeloSeleccionado = "chatgpt"; // por defecto
+
+const btnChatGPT = document.getElementById("modeloChatGPT");
+const btnGemini = document.getElementById("modeloGemini");
+
+btnChatGPT.addEventListener("click", () => {
+  modeloSeleccionado = "chatgpt";
+  btnChatGPT.classList.add("seleccionado");
+  btnGemini.classList.remove("seleccionado");
+});
+
+btnGemini.addEventListener("click", () => {
+  modeloSeleccionado = "gemini";
+  btnGemini.classList.add("seleccionado");
+  btnChatGPT.classList.remove("seleccionado");
+});
+
 mejorarBtn.addEventListener("click", async () => {
   if (mejorado) {
     textarea.value = textoOriginal;
@@ -66,7 +83,12 @@ mejorarBtn.addEventListener("click", async () => {
 
   try {
     const nivel = niveles[slider.value];
-    const response = await fetch(`https://backend-falcon-extension.vercel.app/api/redactar${nivel.endpoint}`, {
+    const base = "https://backend-falcon-extension.vercel.app/api/";
+    const endpointNombre = modeloSeleccionado === "gemini"
+      ? `redactar${nivel.endpoint}Gemini`
+      : `redactar${nivel.endpoint}`;
+      
+    const response = await fetch(`${base}${endpointNombre}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ texto_usuario: textoOriginal }),

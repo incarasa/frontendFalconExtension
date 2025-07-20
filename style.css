@@ -194,3 +194,37 @@ input[data-nivel="2"]::-moz-range-thumb {
 input[data-nivel="3"]::-moz-range-thumb {
   background: #2e7d32;
 }
+
+
+/* ESCOGER EL MODELO */
+
+.modelo-wrapper {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modelo-botones button {
+  margin: 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: #ccc;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+
+.modelo-botones button.seleccionado {
+  color: white;
+}
+
+.modelo-botones #modeloChatGPT.seleccionado {
+  background-color: #00c853; /* verde */
+}
+
+.modelo-botones #modeloGemini.seleccionado {
+  background-color: #1e88e5; /* azul */
+}

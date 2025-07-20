@@ -15,6 +15,14 @@
     <div class="contenedor">
         <h1>Redactor de Historias Clínicas</h1>
 
+        <div class="modelo-wrapper">
+          <div class="modelo-botones">
+            <label><strong>Modelo de IA:</strong></label>
+            <button id="modeloChatGPT" class="seleccionado">ChatGPT</button>
+            <button id="modeloGemini">Gemini</button>
+          </div>
+        </div>
+
         <div class="slider-wrapper">
           <label for="autonomiaSlider" id="tituloAutonomia"><strong>Nivel de autonomía de la IA:</strong></label>
           <input type="range" id="autonomiaSlider" min="1" max="3" value="2" step="1">
