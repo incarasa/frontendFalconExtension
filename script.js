@@ -16,7 +16,7 @@ const niveles = {
     endpoint: "Asistido"
   },
   3: {
-    texto: "Predictivo – Redacción completa, con inferencias clínicas razonables. (Incluye Exammen Físico, Impresión Diagnóstica y Posible Tratamiento)",
+    texto: "Predictivo – Redacción completa, con inferencias clínicas razonables. (Incluye Exámen Físico, Impresión Diagnóstica y Posible Tratamiento)",
     clase: "predictivo",
     sliderClase: "slider-predictivo",
     endpoint: "Predictivo"
