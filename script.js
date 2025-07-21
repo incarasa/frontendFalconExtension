@@ -1,5 +1,6 @@
 const slider = document.getElementById("autonomiaSlider");
 const nivelDescripcion = document.getElementById("nivelDescripcion");
+const mensajeImportanteDiv = document.getElementById("mensajeImportante");
 
 const niveles = {
   1: {
@@ -15,7 +16,7 @@ const niveles = {
     endpoint: "Asistido"
   },
   3: {
-    texto: "Predictivo – Redacción completa, con inferencias clínicas razonables.",
+    texto: "Predictivo – Redacción completa, con inferencias clínicas razonables. (Incluye Exammen Físico, Impresión Diagnóstica y Posible Tratamiento)",
     clase: "predictivo",
     sliderClase: "slider-predictivo",
     endpoint: "Predictivo"
@@ -44,10 +45,11 @@ textarea.addEventListener("input", () => {
     mejorado = false;
     setEstadoBoton("Mejorar con IA");
     mejorarBtn.disabled = false;
+    mensajeImportanteDiv.style.display = "none";
   }
 });
 
-let modeloSeleccionado = "chatgpt"; // por defecto
+let modeloSeleccionado = "chatgpt";
 
 const btnChatGPT = document.getElementById("modeloChatGPT");
 const btnGemini = document.getElementById("modeloGemini");
@@ -69,6 +71,7 @@ mejorarBtn.addEventListener("click", async () => {
     textarea.value = textoOriginal;
     setEstadoBoton("Mejorar con IA");
     mejorado = false;
+    mensajeImportanteDiv.style.display = "none";
     return;
   }
 
@@ -87,7 +90,7 @@ mejorarBtn.addEventListener("click", async () => {
     const endpointNombre = modeloSeleccionado === "gemini"
       ? `redactar${nivel.endpoint}Gemini`
       : `redactar${nivel.endpoint}`;
-      
+
     const response = await fetch(`${base}${endpointNombre}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -100,6 +103,21 @@ mejorarBtn.addEventListener("click", async () => {
       textarea.value = textoActual;
       setEstadoBoton("Deshacer", "deshacer");
       mejorado = true;
+
+      if (data.texto_importante && data.texto_importante.trim() !== "") {
+        // Limpieza de Markdown innecesario y líneas vacías
+        let texto = data.texto_importante.trim()
+          .replace(/^\s*\*\*\s*$/gm, "") // elimina líneas con solo **
+          .replace(/^\s*[-*]\s*$/gm, "") // elimina líneas con solo - o *
+          .replace(/^\s*$/gm, "");       // elimina líneas completamente vacías
+
+        const html = DOMPurify.sanitize(marked.parse(`**IMPORTANTE:**\n\n${texto}`));
+        mensajeImportanteDiv.innerHTML = html;
+        mensajeImportanteDiv.style.display = "block";
+        mensajeImportanteDiv.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        mensajeImportanteDiv.style.display = "none";
+      }
     } else {
       setEstadoBoton("Error al mejorar", "error");
     }
@@ -111,20 +129,15 @@ mejorarBtn.addEventListener("click", async () => {
   }
 });
 
-//CODIGO PARA EL SLIDER
-
 slider.addEventListener("input", () => {
   const nivel = niveles[slider.value];
 
-  // Actualizar texto descriptivo
   nivelDescripcion.textContent = nivel.texto;
   nivelDescripcion.classList.remove("manual", "asistido", "predictivo");
   nivelDescripcion.classList.add("descripcion-autonomia", nivel.clase);
 
-  // Cambiar el color del thumb dinámicamente
   slider.setAttribute("data-nivel", slider.value);
 
-  // Actualizar el fondo de la barra con un degradado visual
   const porcentaje = ((slider.value - 1) / 2) * 100;
   let color = "#ccc";
   if (slider.value == "1") color = "#607d8b";
@@ -132,8 +145,6 @@ slider.addEventListener("input", () => {
   else if (slider.value == "3") color = "#2e7d32";
 
   slider.style.background = `linear-gradient(to right, ${color} ${porcentaje}%, #ccc ${porcentaje}%)`;
-
-
 });
 
 window.addEventListener("DOMContentLoaded", () => {

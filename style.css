@@ -34,6 +34,10 @@ h1 {
   width: 100%;
 }
 
+#lab-modelo {
+  font-weight: 400;
+}
+
 textarea {
   width: 100%;
   height: 250px !important;
@@ -203,6 +207,10 @@ input[data-nivel="3"]::-moz-range-thumb {
   margin-bottom: 20px;
 }
 
+.modelo-botones {
+  margin-top: 10px;
+}
+
 .modelo-botones button {
   margin: 5px;
   padding: 8px 16px;
@@ -227,4 +235,38 @@ input[data-nivel="3"]::-moz-range-thumb {
 
 .modelo-botones #modeloGemini.seleccionado {
   background-color: #1e88e5; /* azul */
+}
+
+/* MENSAJE IMPORTANTE POR SEPARADO */
+
+.mensaje-importante {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: #e3f2fd; /* Azul muy claro */
+  border-left: 6px solid #0288d1; /* Azul profesional */
+  color: #0d47a1; /* Azul marino para texto */
+  font-weight: 500;
+  border-radius: 8px;
+  font-size: 1rem;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.mensaje-importante strong {
+  font-weight: 700;
+}
+
+.mensaje-importante p {
+  margin: 0.5rem 0;
+}
+
+.mensaje-importante ul,
+.mensaje-importante ol {
+  padding-left: 1.2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.mensaje-importante li {
+  margin-bottom: 0.4rem;
 }

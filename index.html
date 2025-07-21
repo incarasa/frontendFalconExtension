@@ -16,8 +16,8 @@
         <h1>Redactor de Historias Clínicas</h1>
 
         <div class="modelo-wrapper">
+          <label id="lab-modelo"><strong>Modelo de IA:</strong></label>
           <div class="modelo-botones">
-            <label><strong>Modelo de IA:</strong></label>
             <button id="modeloChatGPT" class="seleccionado">ChatGPT</button>
             <button id="modeloGemini">Gemini</button>
           </div>
@@ -34,6 +34,8 @@
             <button id="mejorarBtn">Mejorar con IA</button>
         </div>
 
+        <!-- NUEVO: Mensaje IMPORTANTE por separado (revisar) -->
+        <div id="mensajeImportante" class="mensaje-importante" style="display: none;"></div>
 
         <div id="confirm-buttons" style="display: none;">
             <button id="confirmarBtn">✅ Confirmar</button>
@@ -44,5 +46,7 @@
   
 
   <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.2/dist/purify.min.js"></script>
 </body>
 </html>
