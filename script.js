@@ -87,14 +87,17 @@ mejorarBtn.addEventListener("click", async () => {
   try {
     const nivel = niveles[slider.value];
     const base = "https://backend-falcon-extension.vercel.app/api/";
+    /* const base = "http://localhost:3000/api/"; */
     const endpointNombre = modeloSeleccionado === "gemini"
       ? `redactar${nivel.endpoint}Gemini`
       : `redactar${nivel.endpoint}`;
 
+    const requisitos = document.getElementById("requisitosTextarea").value;
+
     const response = await fetch(`${base}${endpointNombre}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ texto_usuario: textoOriginal }),
+      body: JSON.stringify({ texto_usuario: textoOriginal, requisitos }),
     });
 
     const data = await response.json();
@@ -150,3 +153,22 @@ slider.addEventListener("input", () => {
 window.addEventListener("DOMContentLoaded", () => {
   slider.dispatchEvent(new Event("input"));
 });
+
+/* FUNCIONAMIENTO DE TEMPLATES */
+const toggleBtn = document.getElementById("toggleRequisitos");
+const requisitosBox = document.getElementById("requisitosBox");
+
+toggleBtn.addEventListener("click", () => {
+  requisitosBox.style.display = requisitosBox.style.display === "none" ? "block" : "none";
+});
+
+
+requisitosTextarea.textContent = 
+` - Antecedentes  
+ - Medicamentos que toma el paciente  
+ - Síntomas del paciente  
+ - Cuanto tiempo ha transcurrido  
+ - Tomó medicamentos adicionales  
+ - Atenuantes y exhacerbantes  
+ - Pertinentes negativos (MUY IMPORTANTE pues es un seguro legal para los médicos)
+ `
