@@ -86,8 +86,8 @@ mejorarBtn.addEventListener("click", async () => {
 
   try {
     const nivel = niveles[slider.value];
- /*    const base = "https://backend-falcon-extension.vercel.app/api/"; */
-    const base = "http://localhost:3000/api/";
+    const base = "https://backend-falcon-extension.vercel.app/api/";
+    /* const base = "http://localhost:3000/api/"; */
     const endpointNombre = modeloSeleccionado === "gemini"
       ? `redactar${nivel.endpoint}Gemini`
       : `redactar${nivel.endpoint}`;
