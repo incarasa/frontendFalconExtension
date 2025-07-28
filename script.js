@@ -220,3 +220,22 @@ microfonoBtn.addEventListener("click", () => {
     microfonoBtn.textContent = "🎤";
   }
 });
+
+/* FUNCIONAMIENTO DE TEMPLATES */
+const toggleBtn = document.getElementById("toggleRequisitos");
+const requisitosBox = document.getElementById("requisitosBox");
+const requisitosTextarea = document.getElementById("requisitosTextarea");
+
+toggleBtn.addEventListener("click", () => {
+  requisitosBox.style.display = requisitosBox.style.display === "none" ? "block" : "none";
+});
+
+requisitosTextarea.textContent = 
+` - Antecedentes  
+ - Medicamentos que toma el paciente  
+ - Síntomas del paciente  
+ - Cuánto tiempo ha transcurrido  
+ - Tomó medicamentos adicionales  
+ - Atenuantes y exacerbantes  
+ - Pertinentes negativos (MUY IMPORTANTE pues es un seguro legal para los médicos)
+`;
