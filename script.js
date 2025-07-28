@@ -86,8 +86,8 @@ mejorarBtn.addEventListener("click", async () => {
 
   try {
     const nivel = niveles[slider.value];
-    const base = "https://backend-falcon-extension.vercel.app/api/";
-    /* const base = "http://localhost:3000/api/"; */
+ /*    const base = "https://backend-falcon-extension.vercel.app/api/"; */
+    const base = "http://localhost:3000/api/";
     const endpointNombre = modeloSeleccionado === "gemini"
       ? `redactar${nivel.endpoint}Gemini`
       : `redactar${nivel.endpoint}`;
@@ -154,21 +154,69 @@ window.addEventListener("DOMContentLoaded", () => {
   slider.dispatchEvent(new Event("input"));
 });
 
-/* FUNCIONAMIENTO DE TEMPLATES */
-const toggleBtn = document.getElementById("toggleRequisitos");
-const requisitosBox = document.getElementById("requisitosBox");
+/* FUNCIONAMIENTO DE MICROFONO */
+const microfonoBtn = document.getElementById("microfonoBtn");
+let escuchando = false;
 
-toggleBtn.addEventListener("click", () => {
-  requisitosBox.style.display = requisitosBox.style.display === "none" ? "block" : "none";
+let recognition;
+let textoOriginalVoz = "";
+let textoAcumulado = "";
+
+if ('webkitSpeechRecognition' in window) {
+  recognition = new webkitSpeechRecognition();
+  recognition.lang = 'es-ES';
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.onresult = (event) => {
+    let finalTranscript = "";
+    let interimTranscript = "";
+
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+      const transcript = event.results[i][0].transcript.trim();
+
+      if (event.results[i].isFinal) {
+        // Solo agrega punto si termina con palabra completa
+        finalTranscript += transcript.endsWith('.') || transcript.endsWith('?') || transcript.endsWith('!') 
+          ? transcript 
+          : transcript + " ";
+      } else {
+        interimTranscript += transcript + " ";
+      }
+    }
+
+    if (finalTranscript.trim() !== "") {
+      textoAcumulado += finalTranscript + " ";
+    }
+
+    // Mostrar texto acumulado + transcripción en curso
+    textarea.value = (textoOriginalVoz + "\n" + textoAcumulado + interimTranscript).trim();
+  };
+
+  recognition.onend = () => {
+    if (escuchando) recognition.start(); // Reiniciar si aún está activo
+  };
+}
+
+microfonoBtn.addEventListener("click", () => {
+  if (!recognition) {
+    alert("Tu navegador no soporta reconocimiento de voz.");
+    return;
+  }
+
+  if (!escuchando) {
+    textoOriginalVoz = textarea.value.trim();
+    textoAcumulado = "";
+    recognition.start();
+    escuchando = true;
+    microfonoBtn.classList.add("escuchando");
+    microfonoBtn.title = "Detener micrófono";
+    microfonoBtn.textContent = "Escuchando..."
+  } else {
+    recognition.stop();
+    escuchando = false;
+    microfonoBtn.classList.remove("escuchando");
+    microfonoBtn.title = "Hablar";
+    microfonoBtn.textContent = "🎤";
+  }
 });
-
-
-requisitosTextarea.textContent = 
-` - Antecedentes  
- - Medicamentos que toma el paciente  
- - Síntomas del paciente  
- - Cuanto tiempo ha transcurrido  
- - Tomó medicamentos adicionales  
- - Atenuantes y exhacerbantes  
- - Pertinentes negativos (MUY IMPORTANTE pues es un seguro legal para los médicos)
- `
