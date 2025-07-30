@@ -248,6 +248,16 @@ input[data-nivel="3"]::-moz-range-thumb {
   background-color: #1e88e5; /* azul */
 }
 
+.modelo-botones #modeloGemma.seleccionado {
+  background-color: #8e24aa; /* púrpura */
+}
+
+#modeloGemma.deshabilitado {
+  cursor: not-allowed;
+  background-color: #ccc !important;
+  color: #666 !important;
+}
+
 /* MENSAJE IMPORTANTE POR SEPARADO */
 
 .mensaje-importante {

@@ -53,24 +53,63 @@ let modeloSeleccionado = "chatgpt";
 
 const btnChatGPT = document.getElementById("modeloChatGPT");
 const btnGemini = document.getElementById("modeloGemini");
+const btnGemma = document.getElementById("modeloGemma");
+
+/* nuevo para gemma */
+
+function actualizarEstadoBotonGemma() {
+  const nivel = niveles[slider.value];
+  const estaEnManual = nivel.endpoint === "Manual";
+
+  if (estaEnManual) {
+    btnGemma.disabled = true;
+    btnGemma.classList.add("deshabilitado");
+    btnGemma.title = "No disponible en modo Manual";
+    btnGemma.style.pointerEvents = "none";
+    btnGemma.style.opacity = "0.5";
+
+    // Si MedGemma está seleccionado, cambia a otro automáticamente
+    if (modeloSeleccionado === "gemma") {
+      modeloSeleccionado = "chatgpt";
+      btnGemma.classList.remove("seleccionado");
+      btnChatGPT.classList.add("seleccionado");
+    }
+  } else {
+    btnGemma.disabled = false;
+    btnGemma.classList.remove("deshabilitado");
+    btnGemma.title = "";
+    btnGemma.style.pointerEvents = "auto";
+    btnGemma.style.opacity = "1";
+  }
+}
 
 btnChatGPT.addEventListener("click", () => {
   modeloSeleccionado = "chatgpt";
   btnChatGPT.classList.add("seleccionado");
   btnGemini.classList.remove("seleccionado");
+  btnGemma.classList.remove("seleccionado");
 });
 
 btnGemini.addEventListener("click", () => {
   modeloSeleccionado = "gemini";
   btnGemini.classList.add("seleccionado");
   btnChatGPT.classList.remove("seleccionado");
+  btnGemma.classList.remove("seleccionado");
+});
+
+btnGemma.addEventListener("click", () => {
+  modeloSeleccionado = "gemma";
+  btnGemma.classList.add("seleccionado");
+  btnChatGPT.classList.remove("seleccionado");
+  btnGemini.classList.remove("seleccionado");
 });
 
 mejorarBtn.addEventListener("click", async () => {
   if (mejorado) {
+    // Si ya fue mejorado, entonces estamos en modo "Deshacer"
     textarea.value = textoOriginal;
-    setEstadoBoton("Mejorar con IA");
     mejorado = false;
+    setEstadoBoton("Mejorar con IA");
     mensajeImportanteDiv.style.display = "none";
     return;
   }
@@ -87,10 +126,19 @@ mejorarBtn.addEventListener("click", async () => {
   try {
     const nivel = niveles[slider.value];
     const base = "https://backend-falcon-extension.vercel.app/api/";
-    /* const base = "http://localhost:3000/api/"; */
-    const endpointNombre = modeloSeleccionado === "gemini"
-      ? `redactar${nivel.endpoint}Gemini`
-      : `redactar${nivel.endpoint}`;
+    let endpointNombre = "";
+
+    if (modeloSeleccionado === "gemini") {
+      endpointNombre = `redactar${nivel.endpoint}Gemini`;
+    } else if (modeloSeleccionado === "gemma") {
+      if (nivel.endpoint === "Manual") {
+        setEstadoBoton("No disponible en MedGemma", "error");
+        return;
+      }
+      endpointNombre = `redactar${nivel.endpoint}Gemma`;
+    } else {
+      endpointNombre = `redactar${nivel.endpoint}`;
+    }
 
     const requisitos = document.getElementById("requisitosTextarea").value;
 
@@ -108,11 +156,10 @@ mejorarBtn.addEventListener("click", async () => {
       mejorado = true;
 
       if (data.texto_importante && data.texto_importante.trim() !== "") {
-        // Limpieza de Markdown innecesario y líneas vacías
         let texto = data.texto_importante.trim()
-          .replace(/^\s*\*\*\s*$/gm, "") // elimina líneas con solo **
-          .replace(/^\s*[-*]\s*$/gm, "") // elimina líneas con solo - o *
-          .replace(/^\s*$/gm, "");       // elimina líneas completamente vacías
+          .replace(/^\s*\*\*\s*$/gm, "")
+          .replace(/^\s*[-*]\s*$/gm, "")
+          .replace(/^\s*$/gm, "");
 
         const html = DOMPurify.sanitize(marked.parse(`**IMPORTANTE:**\n\n${texto}`));
         mensajeImportanteDiv.innerHTML = html;
@@ -148,13 +195,13 @@ slider.addEventListener("input", () => {
   else if (slider.value == "3") color = "#2e7d32";
 
   slider.style.background = `linear-gradient(to right, ${color} ${porcentaje}%, #ccc ${porcentaje}%)`;
+  actualizarEstadoBotonGemma(); // ← esta línea al final (es para gemma button)
 });
 
 window.addEventListener("DOMContentLoaded", () => {
   slider.dispatchEvent(new Event("input"));
 });
 
-/* FUNCIONAMIENTO DE MICROFONO */
 const microfonoBtn = document.getElementById("microfonoBtn");
 let escuchando = false;
 
@@ -176,7 +223,6 @@ if ('webkitSpeechRecognition' in window) {
       const transcript = event.results[i][0].transcript.trim();
 
       if (event.results[i].isFinal) {
-        // Solo agrega punto si termina con palabra completa
         finalTranscript += transcript.endsWith('.') || transcript.endsWith('?') || transcript.endsWith('!') 
           ? transcript 
           : transcript + " ";
@@ -189,12 +235,11 @@ if ('webkitSpeechRecognition' in window) {
       textoAcumulado += finalTranscript + " ";
     }
 
-    // Mostrar texto acumulado + transcripción en curso
     textarea.value = (textoOriginalVoz + "\n" + textoAcumulado + interimTranscript).trim();
   };
 
   recognition.onend = () => {
-    if (escuchando) recognition.start(); // Reiniciar si aún está activo
+    if (escuchando) recognition.start();
   };
 }
 
@@ -221,7 +266,6 @@ microfonoBtn.addEventListener("click", () => {
   }
 });
 
-/* FUNCIONAMIENTO DE TEMPLATES */
 const toggleBtn = document.getElementById("toggleRequisitos");
 const requisitosBox = document.getElementById("requisitosBox");
 const requisitosTextarea = document.getElementById("requisitosTextarea");
